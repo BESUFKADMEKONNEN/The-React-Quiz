@@ -85,9 +85,18 @@ export default function App() {
   }, 0);
   // console.log(numQuestions, questions.lenght);
   useEffect(function () {
-    fetch("http://localhost:8000/questions")
+    // fetch("http://localhost:8000/questions")
+    fetch("https://api.jsonbin.io/v3/b/66d8b0d1e41b4d34e42a4898", {
+      headers: {
+        "X-Master-Key":
+          "$2a$10$MZXNMnKoHUOB/PME67pp1.H37jWRGqpNAiLfQSEOGjj5keIFcyCga",
+      },
+    })
       .then((res) => res.json())
-      .then((data) => dispatch({ type: "dataRecived", payload: data }))
+      .then((data) => {
+        console.log(data.record.questions);
+        dispatch({ type: "dataRecived", payload: data.record.questions });
+      })
       .catch((err) => dispatch({ type: "dataFailed" }));
   }, []);
   return (
@@ -114,7 +123,12 @@ export default function App() {
               dispatch={dispatch}
               answer={answer}
             />
-            <NextButton dispatch={dispatch} answer={answer} index={index} numQuestions={numQuestions} />
+            <NextButton
+              dispatch={dispatch}
+              answer={answer}
+              index={index}
+              numQuestions={numQuestions}
+            />
 
             <Timer dispatch={dispatch} remainingSeconds={remainingSeconds} />
           </>
